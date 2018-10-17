@@ -6,10 +6,9 @@
 int nrDevis = 1;
 
 //cl_device_id *devices
-
 cl_device_id device;
 
-#define cl_int test = clGetDeviceIDs(NULL,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
+#define cl_int getDevID = clGetDeviceIDs(NULL,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
 
 //clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, nrDevis, &device, NULL);
 #define cl_context context = clCreateContext(NULL, nrDevis, &device, NULL, NULL, NULL);
@@ -26,7 +25,7 @@ char *source = {
 
 // Compile the kernel
 #define cl_program program = clCreateProgramWithSource(context, 1, (const char**)&source, NULL, NULL);
-#define cl_program bouildProg = clBouildPtogram(program, 0, NULL, NULL, NULL, NULL);
+#define cl_program_build bouildProg = clBouildPtogram(program, 0, NULL, NULL, NULL, NULL);
 #define cl_kernel kernel = clCreateKernel(program, "heat_diffusion", NULL);
 
 //create the memory object
@@ -36,7 +35,7 @@ char *source = {
 cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, data, 0, NULL, NULL);
 
 // Execute the kernel
-cl_itn clKerlAr = clSetKernelArg(kernel, 0, sizeof(buffer), &buffer);
+cl_int clKerlAr = clSetKernelArg(kernel, 0, sizeof(buffer), &buffer);
 size_t global_dimemsions[] = {LENGTH,0,0};
 clEnqueueNDRangeKernel(queue, kernel, 1, NULL, global_dimemsions, NULL, 0, NULL, NULL);
 
