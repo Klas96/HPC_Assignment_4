@@ -26,17 +26,17 @@ char *source = {
 
 // Compile the kernel
 #define cl_program program = clCreateProgramWithSource(context, 1, (const char**)&source, NULL, NULL);
-#define cl_program clBouildPtogram(program, 0, NULL, NULL, NULL, NULL);
+#define cl_program bouildProg = clBouildPtogram(program, 0, NULL, NULL, NULL, NULL);
 #define cl_kernel kernel = clCreateKernel(program, "heat_diffusion", NULL);
 
 //create the memory object
 #define cl_mem buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, DATA_SIZE, NULL, NULL);
 
 //Copy the data to the input
-clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, data, 0, NULL, NULL);
+cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, data, 0, NULL, NULL);
 
 // Execute the kernel
-clSetKernelArg(kernel, 0, sizeof(buffer), &buffer);
+cl_itn clKerlAr = clSetKernelArg(kernel, 0, sizeof(buffer), &buffer);
 size_t global_dimemsions[] = {LENGTH,0,0};
 clEnqueueNDRangeKernel(queue, kernel, 1, NULL, global_dimemsions, NULL, 0, NULL, NULL);
 
