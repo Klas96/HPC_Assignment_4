@@ -30,7 +30,7 @@ int main(void){
     " int id get_global_id(0);\n"
     " data[id] = sin(data[id]);\n"
     "}\n"
-  }
+  };
 
   // Compile the kernel
   //#define cl_program
