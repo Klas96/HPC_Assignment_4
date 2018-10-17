@@ -4,7 +4,7 @@
 
 // Setup OpenCL
 int nrDevis = 1;
-clGetDeviseIDs(NULL, CL_DEVICE_TYPE_GPU, nrDevis, &device, NULL);
+clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, nrDevis, &device, NULL);
 context = clCreateContext(NULL, nrDevis, &device, NULL, NULL, NULL);
 queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
 
