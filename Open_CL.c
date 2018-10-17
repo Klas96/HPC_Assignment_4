@@ -25,12 +25,12 @@ char *source = {
 }
 
 // Compile the kernel
-program = clCreateProgramWithSource(context, 1, (const char**)&source, NULL, NULL);
-clBouildPtogram(program, 0, NULL, NULL, NULL, NULL);
-kernel = clCreateKernel(program, "heat_diffusion", NULL);
+#define cl_program program = clCreateProgramWithSource(context, 1, (const char**)&source, NULL, NULL);
+#define cl_program clBouildPtogram(program, 0, NULL, NULL, NULL, NULL);
+#define cl_kernel kernel = clCreateKernel(program, "heat_diffusion", NULL);
 
 //create the memory object
-buffer = clCreateBuffer(conetxt, CL_MEM_READ_WRITE, DATA_SIZE, NULL, NULL);
+#define cl_mem buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, DATA_SIZE, NULL, NULL);
 
 //Copy the data to the input
 clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, data, 0, NULL, NULL);
