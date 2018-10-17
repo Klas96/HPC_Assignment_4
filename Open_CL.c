@@ -6,9 +6,9 @@
 int nrDevis = 1;
 
 //cl_device_id *devices
-_cl_device_id * device;
+struct _cl_device_id * device;
 
-int getDevID = clGetDeviceIDs(NULL,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
+#define int getDevID = clGetDeviceIDs(NULL,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
 
 //clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, nrDevis, &device, NULL);
 #define cl_context context = clCreateContext(NULL, nrDevis, &device, NULL, NULL, NULL);
@@ -26,16 +26,17 @@ char *source = {
 // Compile the kernel
 #define cl_program program = clCreateProgramWithSource(context, 1, (const char**)&source, NULL, NULL);
 #define cl_program_build bouildProg = clBouildPtogram(program, 0, NULL, NULL, NULL, NULL);
-#define cl_kernel kernel = clCreateKernel(program, "heat_diffusion", NULL);
+cl_kernel kernel = clCreateKernel(program, "heat_diffusion", NULL);
 
 //create the memory object
-#define cl_mem buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, DATA_SIZE, NULL, NULL);
+cl_mem buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, DATA_SIZE, NULL, NULL);
 
 //Copy the data to the input
 cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, data, 0, NULL, NULL);
 
 // Execute the kernel
 cl_int clKerlAr = clSetKernelArg(kernel, 0, sizeof(buffer), &buffer);
+int LENGTH = 1000;
 size_t global_dimemsions[] = {LENGTH,0,0};
 clEnqueueNDRangeKernel(queue, kernel, 1, NULL, global_dimemsions, NULL, 0, NULL, NULL);
 
