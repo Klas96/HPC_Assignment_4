@@ -9,6 +9,7 @@ int main(void){
   cl_program program;
   cl_kernel kernel;
   cl_mem buffer;
+  cl_command_queue  queue;
 
   // Setup OpenCL
   int nrDevis = 1;
@@ -38,6 +39,7 @@ int main(void){
   kernel = clCreateKernel(program, "heat_diffusion", NULL);
 
   //create the memory object
+  int DATA_SIZE = 1000;
   buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, DATA_SIZE, NULL, NULL);
 
   //Copy the data to the input
@@ -50,6 +52,7 @@ int main(void){
   clEnqueueNDRangeKernel(queue, kernel, 1, NULL, global_dimemsions, NULL, 0, NULL, NULL);
 
   //Read back the results
+  int data = 100;
   clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_float)*LENGTH, data, 0, NULL, NULL);
 
   //Wait for ecerything to finish
