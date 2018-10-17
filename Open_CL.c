@@ -6,11 +6,9 @@
 int nrDevis = 1;
 
 //cl_device_id *devices
-cl_device_id device;
+_cl_device_id * device;
 
-//#define cl_int getDevID =
-
-(void)clGetDeviceIDs(NULL,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
+int getDevID = clGetDeviceIDs(NULL,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
 
 //clGetDeviceIDs(NULL, CL_DEVICE_TYPE_GPU, nrDevis, &device, NULL);
 #define cl_context context = clCreateContext(NULL, nrDevis, &device, NULL, NULL, NULL);
