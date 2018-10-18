@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
   const double maxIter = strtol(argv[5]+2, &endpt,10);
 
   double boxes[boxHeight+2][boxWidth+2];
-  __int * test;
+  int * test = malloc(sizeof(int));
 
   for(int i = 0; i < boxHeight+2; i++){
     for(int j = 0; j < boxWidth+2; j++){
@@ -51,6 +51,9 @@ int main(int argc, char* argv[]){
   int HEIGHT = boxHeight;
   int WIDTH = boxWidth;
 
+  cl_int err;
+  cl_platform_id platform;
+  cl_context_properties props[3] = { CL_CONTEXT_PLATFORM, 0, 0 };
   cl_context context;
   cl_device_id device;
   cl_program program;
@@ -59,14 +62,16 @@ int main(int argc, char* argv[]){
   cl_command_queue  queue;
 
   // Setup OpenCL
-  clGetDeviceIDs(NULL,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
+  err = clGetPlatformIDs( 1, &platform, NULL );
+  err = clGetDeviceIDs(platform,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
 
-  context = clCreateContext(NULL, 1, &device, NULL, NULL, NULL);
-  //queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
-  queue = clCreateCommandQueueWithProperties(context, device, (cl_command_queue_properties)0, NULL);
+
+  props[1] = (cl_context_properties)platform;//isert
+  //context = clCreateContext(NULL, 1, &device, NULL, NULL, NULL);
+  context = clCreateContext(props, 1, &device, NULL, NULL, &err);
 
   //Read in kerneal
-  char * source = 0;
+  char * source;
   long length;
   FILE * f = fopen ("Kernel.c", "rb");
 
@@ -87,19 +92,21 @@ int main(int argc, char* argv[]){
   printf("%s\n", source);
 
   // Compile the kernel
-  program = clCreateProgramWithSource(context, 1, (const char**)&source, NULL, NULL);
+  program = clCreateProgramWithSource(context, 1, (const char**)&source, NULL, &err);
   //cl_int clBuildProgram (cl_program program,cl_uint num_devices,const cl_device_id *device_list,const char *options,void (*pfn_notify)(cl_program, void *user_data),void *user_data)
-  clBuildProgram(program, 10, NULL, NULL, NULL, NULL);
+  err = clBuildProgram(program, 10, NULL, NULL, NULL, NULL);
 
   kernel = clCreateKernel(program, "heat_diffuse", NULL);
 
+  //queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
+  queue = clCreateCommandQueueWithProperties(context, device, (cl_command_queue_properties)0, NULL);
+
   //create the memory object
-  buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, DATA_SIZE, NULL, NULL);
+  buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, DATA_SIZE, NULL, &err);
 
   //Copy the data to the input
   //cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, boxes, 0, NULL, NULL);
-  clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, test, 0, NULL, NULL);
-
+  err = clEnqueueWriteBuffer(queue, buffer, CL_TRUE, 0, DATA_SIZE, test, 0, NULL, NULL);
 
   // Execute the kernel
   //sätter argument 0 i kernel till buffer
@@ -110,19 +117,21 @@ int main(int argc, char* argv[]){
   size_t local_dimemsions[] = {3,3,0};
 
   //clEnqueueNDRangeKernel(queue, kernel, GLOBAL DIM, LOCAL DIM, global_dimemsions, NULL, 0, NULL, NULL);
-  clEnqueueNDRangeKernel(queue, kernel, 2, NULL, global_dimemsions, local_dimemsions, 0, NULL, NULL);
+  //clEnqueueNDRangeKernel(queue, kernel, 2, NULL, global_dimemsions, local_dimemsions, 0, NULL, NULL);
+  clEnqueueNDRangeKernel(queue, kernel, 2, NULL, 1, 1, 0, NULL, NULL);
 
   //Wait for ecerything to finish
-  clFinish(queue);
+  err = clFinish(queue);
 
   //Read back the results
   //clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
-  clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, test, 0, NULL, NULL);
+  err = clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, test, 0, NULL, NULL);
 
-  clFinish(queue);
+  err == clFinish(queue);
 
   printf("  Läst från GPU %i   ",test[j][k]);;
 
+  clReleaseMemObject(buffer);
   clReleaseCommandQueue(queue);
   clReleaseContext(context);
 
