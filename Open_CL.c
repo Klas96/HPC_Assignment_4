@@ -47,6 +47,7 @@ int main(int argc, char* argv[]){
 
   //OpenCL related declartaions
   //Läser tillbaka data i denna
+  //int* test = (int)malloc(sizeof(float)*boxHeight*boxWidth);
   int DATA_SIZE = sizeof(float)*boxHeight*boxWidth;
   int HEIGHT = boxHeight;
   int WIDTH = boxWidth;
@@ -109,7 +110,7 @@ int main(int argc, char* argv[]){
   clEnqueueNDRangeKernel(queue, kernel, 2, NULL, global_dimemsions, local_dimemsions, 0, NULL, NULL);
 
   //Read back the results
-  clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_float)*HEIGHT, boxes, 0, NULL, NULL);
+  clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
 
   //Wait for ecerything to finish
   clFinish(queue);
