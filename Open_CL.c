@@ -97,7 +97,7 @@ int main(int argc, char* argv[]){
 
   //Copy the data to the input
   //cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, boxes, 0, NULL, NULL);
-  cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, test, 0, NULL, NULL);
+  clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, test, 0, NULL, NULL);
 
 
   // Execute the kernel
