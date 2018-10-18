@@ -63,7 +63,8 @@ int main(int argc, char* argv[]){
   clGetDeviceIDs(NULL,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
 
   context = clCreateContext(NULL, 1, &device, NULL, NULL, NULL);
-  queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
+  //queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
+  queue = clCreateCommandQueueWithProperties(context, device, (cl_command_queue_properties)0, NULL);
 
   //Read in kerneal
   char * source = 0;
