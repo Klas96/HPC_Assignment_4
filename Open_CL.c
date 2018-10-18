@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
   const double maxIter = strtol(argv[5]+2, &endpt,10);
 
   double boxes[boxHeight+2][boxWidth+2];
-  double boxesLoc[boxHeight+2][boxWidth+2];
+  int * test[boxHeight+2][boxWidth+2];
 
   for(int i = 0; i < boxHeight+2; i++){
     for(int j = 0; j < boxWidth+2; j++){
@@ -96,7 +96,9 @@ int main(int argc, char* argv[]){
   buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, DATA_SIZE, NULL, NULL);
 
   //Copy the data to the input
-  cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, boxes, 0, NULL, NULL);
+  //cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, boxes, 0, NULL, NULL);
+  cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, test, 0, NULL, NULL);
+
 
   // Execute the kernel
   //sätter argument 0 i kernel till buffer
@@ -110,14 +112,15 @@ int main(int argc, char* argv[]){
   clEnqueueNDRangeKernel(queue, kernel, 2, NULL, global_dimemsions, local_dimemsions, 0, NULL, NULL);
 
   //Read back the results
-  clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
+  //clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
+  clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, test, 0, NULL, NULL);
 
   //Wait for ecerything to finish
   clFinish(queue);
 
   for(int j = 1; j < boxHeight+1; j++){
     for(int k = 1; k < boxWidth+1; k++){
-      printf("   %f   ",boxes[j][k]);;
+      printf("   %f   ",test[j][k]);;
     }
   printf("\n");
   }
