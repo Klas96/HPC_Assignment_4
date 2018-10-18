@@ -23,7 +23,7 @@ int main(int argc, char* argv[]){
   for(int i = 0; i < boxHeight+2; i++){
     for(int j = 0; j < boxWidth+2; j++){
       boxes[i][j] = 0;
-      boxesLoc[i][j] = 0;
+      test[i][j] = 0;
     }
   }
 
