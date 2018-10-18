@@ -2,7 +2,7 @@
 //Vill även ta reda på dimensioner av matrisen
 
 //void kernel heat_diffuse(global float *boxes) {
-void kernel heat_diffuse(global int * boxes) {
+kernel void heat_diffuse(global int * boxes) {
   //get thread number
   int id = get_global_id(0);
 
