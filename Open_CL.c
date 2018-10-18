@@ -48,8 +48,8 @@ int main(int argc, char* argv[]){
   //Läser tillbaka data i denna
   //int* test = (int)malloc(sizeof(float)*boxHeight*boxWidth);
   int DATA_SIZE = sizeof(float)*boxHeight*boxWidth;
-  int HEIGHT = boxHeight;
-  int WIDTH = boxWidth;
+  int HEIGHT = boxHeight+2;
+  int WIDTH = boxWidth+2;
 
   cl_int err;
   cl_platform_id platform;
@@ -130,7 +130,7 @@ int main(int argc, char* argv[]){
   err == clFinish(queue);
    for(int i = 0; i<boxHeight; i++){
      for(int j = 0; j<boxWidth; j++){
-      printf("  Läst från GPU %i   ",boxes[j][k]); 
+      printf("  Läst från GPU %i   ",boxes[j][k]);
      }
    }
 
