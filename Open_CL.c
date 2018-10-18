@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
   const double maxIter = strtol(argv[5]+2, &endpt,10);
 
   double boxes[boxHeight+2][boxWidth+2];
-  int * test = malloc(sizeof(int));
+  //int * test = malloc(sizeof(int));
 
 
   for(int i = 0; i < boxHeight+2; i++){
@@ -49,8 +49,8 @@ int main(int argc, char* argv[]){
   //Läser tillbaka data i denna
   //int* test = (int)malloc(sizeof(float)*boxHeight*boxWidth);
   int DATA_SIZE = sizeof(float)*boxHeight*boxWidth;
-  int HEIGHT = boxHeight;
-  int WIDTH = boxWidth;
+  int HEIGHT = boxHeight+2;
+  int WIDTH = boxWidth+2;
 
   cl_int err;
   cl_platform_id platform;
@@ -107,7 +107,7 @@ int main(int argc, char* argv[]){
 
   //Copy the data to the input
   //cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, boxes, 0, NULL, NULL);
-  err = clEnqueueWriteBuffer(queue, buffer, CL_TRUE, 0, DATA_SIZE, test, 0, NULL, NULL);
+  err = clEnqueueWriteBuffer(queue, buffer, CL_TRUE, 0, DATA_SIZE, boxes, 0, NULL, NULL);
 
   // Execute the kernel
   //sätter argument 0 i kernel till buffer
@@ -119,18 +119,24 @@ int main(int argc, char* argv[]){
 
   //clEnqueueNDRangeKernel(queue, kernel, GLOBAL DIM, LOCAL DIM, global_dimemsions, NULL, 0, NULL, NULL);
   //clEnqueueNDRangeKernel(queue, kernel, 2, NULL, global_dimemsions, local_dimemsions, 0, NULL, NULL);
-  clEnqueueNDRangeKernel(queue, kernel, 2, NULL, 1, 1, 0, NULL, NULL);
+  clEnqueueNDRangeKernel(queue, kernel, global_dimemsions, 3, NULL, global_dimemsions, local_dimemsions, NULL, NULL);
 
   //Wait for ecerything to finish
   err = clFinish(queue);
 
   //Read back the results
   //clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
-  err = clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, test, 0, NULL, NULL);
+  err = clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(float)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
+  err = clFinish(queue);
 
+  
   err == clFinish(queue);
-
-  printf("  Läst från GPU %i\n",test);;
+   for(int i = 0; i<boxHeight; i++){
+     for(int j = 0; j<boxWidth; j++){
+      printf(" %f ",boxes[i][j]); 
+     }
+     printf("\n");
+   }
 
   clReleaseMemObject(buffer);
   clReleaseCommandQueue(queue);
