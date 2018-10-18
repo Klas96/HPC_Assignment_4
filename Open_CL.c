@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
   const double maxIter = strtol(argv[5]+2, &endpt,10);
 
   double boxes[boxHeight+2][boxWidth+2];
-  int * test[boxHeight+2][boxWidth+2];
+  int test[boxHeight+2][boxWidth+2];
 
   for(int i = 0; i < boxHeight+2; i++){
     for(int j = 0; j < boxWidth+2; j++){
@@ -97,7 +97,7 @@ int main(int argc, char* argv[]){
 
   //Copy the data to the input
   //cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, boxes, 0, NULL, NULL);
-  cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, test, 0, NULL, NULL);
+  clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, test, 0, NULL, NULL);
 
 
   // Execute the kernel
