@@ -65,7 +65,7 @@ int main(int argc, char* argv[]){
   context = clCreateContext(NULL, 1, &device, NULL, NULL, NULL);
   queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
 
-
+  //Read in kerneal
   char * source = 0;
   long length;
   FILE * f = fopen ("Kernel.c", "rb");
@@ -86,11 +86,12 @@ int main(int argc, char* argv[]){
   printf("Kernals:\n\n");
   printf("%s\n", source);
 
-
   // Compile the kernel
   program = clCreateProgramWithSource(context, 1, (const char**)&source, NULL, NULL);
-  clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
-  kernel = clCreateKernel(program, "heat_diffusion", NULL);
+  //cl_int clBuildProgram (cl_program program,cl_uint num_devices,const cl_device_id *device_list,const char *options,void (*pfn_notify)(cl_program, void *user_data),void *user_data)
+  clBuildProgram(program, 10, NULL, NULL, NULL, NULL);
+
+  kernel = clCreateKernel(program, "heat_diffuse", NULL);
 
   //create the memory object
   buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, DATA_SIZE, NULL, NULL);
