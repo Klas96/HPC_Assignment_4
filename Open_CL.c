@@ -112,11 +112,13 @@ int main(int argc, char* argv[]){
   //clEnqueueNDRangeKernel(queue, kernel, GLOBAL DIM, LOCAL DIM, global_dimemsions, NULL, 0, NULL, NULL);
   clEnqueueNDRangeKernel(queue, kernel, 2, NULL, global_dimemsions, local_dimemsions, 0, NULL, NULL);
 
+  //Wait for ecerything to finish
+  clFinish(queue);
+
   //Read back the results
   //clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
   clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, test, 0, NULL, NULL);
 
-  //Wait for ecerything to finish
   clFinish(queue);
 
   for(int j = 1; j < boxHeight+1; j++){
@@ -125,5 +127,9 @@ int main(int argc, char* argv[]){
     }
   printf("\n");
   }
+
+  clReleaseCommandQueue(queue);
+  clReleaseContext(context);
+
   return 0;
 }
