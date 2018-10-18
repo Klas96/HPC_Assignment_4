@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
   const double maxIter = strtol(argv[5]+2, &endpt,10);
 
   double boxes[boxHeight+2][boxWidth+2];
-  __int * test;
+  int * test;
 
   for(int i = 0; i < boxHeight+2; i++){
     for(int j = 0; j < boxWidth+2; j++){
@@ -121,16 +121,8 @@ int main(int argc, char* argv[]){
 
   clFinish(queue);
 
-<<<<<<< HEAD
-  for(int j = 1; j < boxHeight+1; j++){
-    for(int k = 1; k < boxWidth+1; k++){
-      printf("   %i   ",test[j][k]);;
-    }
-  printf("\n");
-  }
-=======
-  printf("  Läst från GPU %i   ",test[j][k]);;
->>>>>>> d50570b84bd9870e5ba13b131d4496a679f163d5
+  printf("  Läst från GPU %i\n",test);;
+
 
   clReleaseCommandQueue(queue);
   clReleaseContext(context);
