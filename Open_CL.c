@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
   const double maxIter = strtol(argv[5]+2, &endpt,10);
 
   double boxes[boxHeight+2][boxWidth+2];
-  int * test[boxHeight+2][boxWidth+2];
+  int test[boxHeight+2][boxWidth+2];
 
   for(int i = 0; i < boxHeight+2; i++){
     for(int j = 0; j < boxWidth+2; j++){
@@ -120,7 +120,7 @@ int main(int argc, char* argv[]){
 
   for(int j = 1; j < boxHeight+1; j++){
     for(int k = 1; k < boxWidth+1; k++){
-      printf("   %f   ",test[j][k]);;
+      printf("   %i   ",test[j][k]);;
     }
   printf("\n");
   }
