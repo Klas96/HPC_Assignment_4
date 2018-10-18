@@ -1,3 +1,6 @@
+#include <math.h>
+#include <stdint.h>
+#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <CL/cl.h>
@@ -14,13 +17,40 @@ int main(int argc, char* argv[]){
   const double diffu = strtol(argv[4]+2, &endpt,10);
   const double maxIter = strtol(argv[5]+2, &endpt,10);
 
+  double boxes[boxHeight+2][boxWidth+2];
+  double boxesLoc[boxHeight+2][boxWidth+2];
+
+  for(int i = 0; i < boxHeight+2; i++){
+    for(int j = 0; j < boxWidth+2; j++){
+      boxes[i][j] = 0;
+      boxesLoc[i][j] = 0;
+    }
+  }
+
+  if(boxHeight%2 == 1 && boxWidth%2 == 1){
+    boxes[(int)boxWidth/2+1][(int)boxHeight/2+1] = iniHeat;
+  }
+  if(boxHeight%2 == 1 && boxWidth%2 == 0){
+      boxes[(int)boxWidth/2][(int)boxHeight/2+1] = iniHeat/2;
+      boxes[(int)boxWidth/2+1][(int)boxHeight/2+1] = iniHeat/2;
+  }
+  if(boxHeight%2 == 0 && boxWidth%2 == 1){
+      boxes[(int)boxWidth/2+1][(int)boxHeight/2] = iniHeat/2;
+      boxes[(int)boxWidth/2+1][(int)boxHeight/2+1] = iniHeat/2;
+  }
+  if(boxHeight%2 == 0 && boxWidth%2 == 0){
+      boxes[(int)boxWidth/2+1][(int)boxHeight/2] = iniHeat/4;
+      boxes[(int)boxWidth/2+1][(int)boxHeight/2+1] = iniHeat/4;
+      boxes[(int)boxWidth/2][(int)boxHeight/2] = iniHeat/4;
+      boxes[(int)boxWidth/2][(int)boxHeight/2+1] = iniHeat/4;
+  }
+
   //OpenCL related declartaions
   //Läser tillbaka data i denna
   float * data;
   int DATA_SIZE = 1000;
   int HEIGHT = boxHeight;
   int WIDTH = boxWidth;
-
 
   cl_context context;
   cl_device_id device;
@@ -35,6 +65,27 @@ int main(int argc, char* argv[]){
   context = clCreateContext(NULL, 1, &device, NULL, NULL, NULL);
   queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
 
+
+  char * source = 0;
+  long length;
+  FILE * f = fopen ("Kernel.c", "rb");
+
+  if (f){
+    fseek (f, 0, SEEK_END);
+    length = ftell (f);
+    fseek (f, 0, SEEK_SET);
+
+    source  = malloc (length);
+
+    if (source){
+      fread (buffer, 1, length, f);
+    }
+    fclose (f);
+  }
+
+  printf("%s\n", source);
+
+/*
   //Define our kernel:
   char *source = {
     "void kernel heat_diffuse(global float *boxes) {"
@@ -45,7 +96,7 @@ int main(int argc, char* argv[]){
       "boxes[j][k] = boxes[j][k] + diffu*((boxes[j-1][k] + boxes[j+1][k] + boxes[j][k-1] + boxes[j][k+1])/4 - boxes[j][k]);"
     "}"
   };
-
+*/
   // Compile the kernel
   //#define cl_program
   program = clCreateProgramWithSource(context, 1, (const char**)&source, NULL, NULL);
