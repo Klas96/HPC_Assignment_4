@@ -78,7 +78,7 @@ int main(int argc, char* argv[]){
     source  = malloc (length);
 
     if (source){
-      fread (buffer, 1, length, f);
+      fread (source, 1, length, f);
     }
     fclose (f);
   }
