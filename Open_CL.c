@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
 
   //OpenCL related declartaions
   //Läser tillbaka data i denna
-  global float * data = 100;
+  float * data;
   int DATA_SIZE = 1000;
   int HEIGHT = boxHeight;
   int WIDTH = boxWidth;
@@ -32,7 +32,7 @@ int main(int argc, char* argv[]){
   // Setup OpenCL
   clGetDeviceIDs(NULL,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
 
-  context = clCreateContext(NULL, nrDevis, &device, NULL, NULL, NULL);
+  context = clCreateContext(NULL, 1, &device, NULL, NULL, NULL);
   queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
 
   //Define our kernel:
