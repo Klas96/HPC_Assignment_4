@@ -142,7 +142,22 @@ int main(int argc, char* argv[]){
 
   // Setup OpenCL
   err = clGetPlatformIDs( 1, &platform, NULL );
+
+  if(err != CL_SUCCESS){
+    printf("Error in clGetPlatformIDs\n");
+    char * errorstring = getErrorString(err);
+    printf("%s\n", errorstring);
+  }
+
   err = clGetDeviceIDs(platform,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
+
+
+  if(err != CL_SUCCESS){
+    printf("Error in clGetPlatformIDs\n");
+    char * errorstring = getErrorString(err);
+    printf("%s\n", errorstring);
+  }
+
 
   props[1] = (cl_context_properties)platform;//isert
   //context = clCreateContext(NULL, 1, &device, NULL, NULL, NULL);
