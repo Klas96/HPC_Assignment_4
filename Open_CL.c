@@ -193,7 +193,7 @@ int main(int argc, char* argv[]){
   printf("%s\n", source);
 
   // Compile the kernel
-  program = clCreateProgramWithSource(context, nmb_devices, (const char**)&source, NULL, &err);
+  program = clCreateProgramWithSource(context, 1, (const char**)&source, NULL, &err);
 
   if(err != CL_SUCCESS){
     printf("Error in clCreateProgramWithSource\n");
