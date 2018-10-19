@@ -97,6 +97,8 @@ int main(int argc, char* argv[]){
   //cl_int clBuildProgram (cl_program program,cl_uint num_devices,const cl_device_id *device_list,const char *options,void (*pfn_notify)(cl_program, void *user_data),void *user_data)
   err = clBuildProgram(program, 10, NULL, NULL, NULL, NULL);
 
+  if(err == )
+  
   kernel = clCreateKernel(program, "heat_diffuse", NULL);
 
   //queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
@@ -133,7 +135,9 @@ int main(int argc, char* argv[]){
   err == clFinish(queue);
    for(int i = 0; i<boxHeight; i++){
      for(int j = 0; j<boxWidth; j++){
+
       printf(" %f ",boxes[i][j]); 
+
      }
      printf("\n");
    }
