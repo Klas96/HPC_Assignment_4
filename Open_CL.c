@@ -140,8 +140,11 @@ int main(int argc, char* argv[]){
   cl_mem buffer;
   cl_command_queue queue;
 
+  cl_uint nmb_platforms;
+  cl_uint nmb_devices;
+
   // Setup OpenCL
-  err = clGetPlatformIDs( 1, &platform, NULL );
+  err = clGetPlatformIDs( 1, &platform, &nmb_platforms);
 
   if(err != CL_SUCCESS){
     printf("Error in clGetPlatformIDs\n");
@@ -149,19 +152,24 @@ int main(int argc, char* argv[]){
     printf("%s\n", errorstring);
   }
 
-  err = clGetDeviceIDs(platform,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
+  err = clGetDeviceIDs(platform,CL_DEVICE_TYPE_GPU, 1, &device, &nmb_devices);
 
 
   if(err != CL_SUCCESS){
-    printf("Error in clGetPlatformIDs\n");
+    printf("Error in clGetDeviceIDs\n");
     char * errorstring = getErrorString(err);
     printf("%s\n", errorstring);
   }
-
 
   props[1] = (cl_context_properties)platform;//isert
   //context = clCreateContext(NULL, 1, &device, NULL, NULL, NULL);
   context = clCreateContext(props, 1, &device, NULL, NULL, &err);
+
+  if(err != CL_SUCCESS){
+    printf("Error in clCreateContext\n");
+    char * errorstring = getErrorString(err);
+    printf("%s\n", errorstring);
+  }
 
   //Read in kerneal
   char * source;
