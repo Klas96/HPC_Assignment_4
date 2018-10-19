@@ -175,6 +175,7 @@ int main(int argc, char* argv[]){
   err = clBuildProgram(program, 10, NULL, NULL, NULL, NULL);
 
   if(err != CL_SUCCESS){
+    printf("Error in clBuildProgram\n");
     char * errorstring = getErrorString(err);
     printf("%s\n", errorstring);
   }
@@ -193,6 +194,7 @@ int main(int argc, char* argv[]){
 
 
   if(err != CL_SUCCESS){
+    printf("Error in clEnqueueWriteBuffer\n");
     char * errorstring = getErrorString(err);
     printf("%s\n", errorstring);
   }
@@ -212,6 +214,7 @@ int main(int argc, char* argv[]){
   err = clFinish(queue);
 
   if(err != CL_SUCCESS){
+    printf("Error in clFinish\n");
     char * errorstring = getErrorString(err);
     printf("%s\n", errorstring);
   }
@@ -220,6 +223,7 @@ int main(int argc, char* argv[]){
   //clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
   err = clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(float)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
   if(err != CL_SUCCESS){
+    printf("Error in clEnqueueReadBuffer\n");
     char * errorstring = getErrorString(err);
     printf("%s\n", errorstring);
   }
