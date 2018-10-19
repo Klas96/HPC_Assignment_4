@@ -20,7 +20,6 @@ int main(int argc, char* argv[]){
   double boxes[boxHeight+2][boxWidth+2];
   //int * test = malloc(sizeof(int));
 
-
   for(int i = 0; i < boxHeight+2; i++){
     for(int j = 0; j < boxWidth+2; j++){
       boxes[i][j] = 0;
@@ -60,12 +59,11 @@ int main(int argc, char* argv[]){
   cl_program program;
   cl_kernel kernel;
   cl_mem buffer;
-  cl_command_queue  queue;
+  cl_command_queue queue;
 
   // Setup OpenCL
   err = clGetPlatformIDs( 1, &platform, NULL );
   err = clGetDeviceIDs(platform,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
-
 
   props[1] = (cl_context_properties)platform;//isert
   //context = clCreateContext(NULL, 1, &device, NULL, NULL, NULL);
@@ -97,8 +95,10 @@ int main(int argc, char* argv[]){
   //cl_int clBuildProgram (cl_program program,cl_uint num_devices,const cl_device_id *device_list,const char *options,void (*pfn_notify)(cl_program, void *user_data),void *user_data)
   err = clBuildProgram(program, 10, NULL, NULL, NULL, NULL);
 
-  if(err == )
-  
+
+  if(result != CL_SUCCESS)
+    printf("BuildProgram\n");
+
   kernel = clCreateKernel(program, "heat_diffuse", NULL);
 
   //queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
@@ -110,6 +110,10 @@ int main(int argc, char* argv[]){
   //Copy the data to the input
   //cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, boxes, 0, NULL, NULL);
   err = clEnqueueWriteBuffer(queue, buffer, CL_TRUE, 0, DATA_SIZE, boxes, 0, NULL, NULL);
+
+
+  if(result != CL_SUCCESS)
+    printf("EnqueueWriteBuffer\n");
 
   // Execute the kernel
   //sätter argument 0 i kernel till buffer
@@ -126,18 +130,22 @@ int main(int argc, char* argv[]){
   //Wait for ecerything to finish
   err = clFinish(queue);
 
+  if(result != CL_SUCCESS)
+    printf("Finish\n");
+
+
   //Read back the results
   //clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
   err = clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(float)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
+  if(result != CL_SUCCESS)
+    printf("ReadBuffer\n");
+
   err = clFinish(queue);
 
-  
   err == clFinish(queue);
    for(int i = 0; i<boxHeight; i++){
      for(int j = 0; j<boxWidth; j++){
-
-      printf(" %f ",boxes[i][j]); 
-
+      printf(" %f ",boxes[i][j]);
      }
      printf("\n");
    }
