@@ -196,6 +196,16 @@ int main(int argc, char* argv[]){
   program = clCreateProgramWithSource(context, 1, (const char**)&source, NULL, &err);
 
   if(err != CL_SUCCESS){
+    printf("Error in clCreateProgramWithSource\n");
+    char * errorstring = getErrorString(err);
+    printf("%s\n", errorstring);
+  }
+
+  //cl_int clBuildProgram (cl_program program,cl_uint num_devices,const cl_device_id *device_list,const char *options,void (*pfn_notify)(cl_program, void *user_data),void *user_data)
+  err = clBuildProgram(program, 1, device, NULL, NULL, NULL);
+
+
+  if(err != CL_SUCCESS){
     printf("Error in clBuildProgram\n");
     char * errorstring = getErrorString(err);
     printf("%s\n", errorstring);
@@ -204,10 +214,21 @@ int main(int argc, char* argv[]){
   kernel = clCreateKernel(program, "heat_diffuse", NULL);
 
   //queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
-  queue = clCreateCommandQueueWithProperties(context, device, (cl_command_queue_properties)0, NULL);
+  queue = clCreateCommandQueueWithProperties(context, device, (cl_command_queue_properties)0, &err);
 
+  if(err != CL_SUCCESS){
+    printf("Error in clCreateCommandQueueWithProperties\n");
+    char * errorstring = getErrorString(err);
+    printf("%s\n", errorstring);
+  }
   //create the memory object
   buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, DATA_SIZE, NULL, &err);
+
+  if(err != CL_SUCCESS){
+    printf("Error in clCreateBuffer\n");
+    char * errorstring = getErrorString(err);
+    printf("%s\n", errorstring);
+  }
 
   //Copy the data to the input
   //cl_int clEqnWriBuff = clEnqueueWriteBuffer(queue, buffer, CL_FALSE, 0, DATA_SIZE, boxes, 0, NULL, NULL);
@@ -242,7 +263,7 @@ int main(int argc, char* argv[]){
 
   //Read back the results
   //clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
-  err = clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(float)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
+  err = clEnqueueReadBuffer(queue, buffer, CL_TRUE, 0, sizeof(float)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
   if(err != CL_SUCCESS){
     printf("Error in clEnqueueReadBuffer\n");
     char * errorstring = getErrorString(err);
