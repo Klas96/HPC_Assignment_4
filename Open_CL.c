@@ -95,8 +95,7 @@ int main(int argc, char* argv[]){
   //cl_int clBuildProgram (cl_program program,cl_uint num_devices,const cl_device_id *device_list,const char *options,void (*pfn_notify)(cl_program, void *user_data),void *user_data)
   err = clBuildProgram(program, 10, NULL, NULL, NULL, NULL);
 
-
-  if(result != CL_SUCCESS)
+  if(err != CL_SUCCESS)
     printf("BuildProgram\n");
 
   kernel = clCreateKernel(program, "heat_diffuse", NULL);
@@ -112,7 +111,7 @@ int main(int argc, char* argv[]){
   err = clEnqueueWriteBuffer(queue, buffer, CL_TRUE, 0, DATA_SIZE, boxes, 0, NULL, NULL);
 
 
-  if(result != CL_SUCCESS)
+  if(err != CL_SUCCESS)
     printf("EnqueueWriteBuffer\n");
 
   // Execute the kernel
@@ -130,14 +129,14 @@ int main(int argc, char* argv[]){
   //Wait for ecerything to finish
   err = clFinish(queue);
 
-  if(result != CL_SUCCESS)
+  if(err != CL_SUCCESS)
     printf("Finish\n");
 
 
   //Read back the results
   //clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(cl_int)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
   err = clEnqueueReadBuffer(queue, buffer, CL_FALSE, 0, sizeof(float)*HEIGHT*WIDTH, boxes, 0, NULL, NULL);
-  if(result != CL_SUCCESS)
+  if(err != CL_SUCCESS)
     printf("ReadBuffer\n");
 
   err = clFinish(queue);
