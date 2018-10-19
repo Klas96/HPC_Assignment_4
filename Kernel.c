@@ -1,4 +1,6 @@
-__kernel void heat_diffuse(__global float * boxes) {
-  int id = get_global_id(0);
-  boxes[3][3] = 1337;
+__kernel void heat_diffuse(float * boxes) {
+  int id0 = get_global_id(0);
+  int id1 = get_global_id(1);
+  boxes[id0][id1] = 1;
+  boxes[6][4] = (float)id0 + id1;
 }
