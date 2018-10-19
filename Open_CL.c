@@ -96,7 +96,7 @@ int main(int argc, char* argv[]){
   err = clBuildProgram(program, 10, NULL, NULL, NULL, NULL);
 
   if(err != CL_SUCCESS)
-    printf("BuildProgram\n");
+     std::cerr << getErrorString(err) << std::endl;
 
   kernel = clCreateKernel(program, "heat_diffuse", NULL);
 
