@@ -144,7 +144,7 @@ int main(int argc, char* argv[]){
   cl_uint nmb_devices;
 
   // Setup OpenCL
-  err = clGetPlatformIDs( 1, &platform, &nmb_platforms);
+  err = clGetPlatformIDs( 1, &platform, NULL);
 
   if(err != CL_SUCCESS){
     printf("Error in clGetPlatformIDs\n");
@@ -152,7 +152,7 @@ int main(int argc, char* argv[]){
     printf("%s\n", errorstring);
   }
 
-  err = clGetDeviceIDs(platform,CL_DEVICE_TYPE_ALL, 1, &device, &nmb_devices);
+  err = clGetDeviceIDs(platform,CL_DEVICE_TYPE_GPU, 1, &device, NULL);
 
   if(err != CL_SUCCESS){
     printf("Error in clGetDeviceIDs\n");
@@ -169,6 +169,9 @@ int main(int argc, char* argv[]){
     char * errorstring = getErrorString(err);
     printf("%s\n", errorstring);
   }
+
+  //queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
+  queue = clCreateCommandQueueWithProperties(context, device, 0, &err);
 
   //Read in kerneal
   char * source;
@@ -201,7 +204,7 @@ int main(int argc, char* argv[]){
   }
 
   //cl_int clBuildProgram (cl_program program,cl_uint num_devices,const cl_device_id *device_list,const char *options,void (*pfn_notify)(cl_program, void *user_data),void *user_data)
-  err = clBuildProgram(program, nmb_devices, &device, NULL, NULL, NULL);
+  err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
 
 
   if(err != CL_SUCCESS){
@@ -210,10 +213,7 @@ int main(int argc, char* argv[]){
     printf("%s\n", errorstring);
   }
 
-  kernel = clCreateKernel(program, "heat_diffuse", NULL);
-
-  //queue = clCreateCommandQueue(context, device, (cl_command_queue_properties)0, NULL);
-  queue = clCreateCommandQueueWithProperties(context, device, (cl_command_queue_properties)0, &err);
+  kernel = clCreateKernel(program, "heat_diffuse", &err);
 
   if(err != CL_SUCCESS){
     printf("Error in clCreateCommandQueueWithProperties\n");
@@ -221,6 +221,7 @@ int main(int argc, char* argv[]){
     printf("%s\n", errorstring);
   }
   //create the memory object
+  //Kolla denna
   buffer = clCreateBuffer(context, CL_MEM_READ_WRITE, DATA_SIZE, NULL, &err);
 
   if(err != CL_SUCCESS){
