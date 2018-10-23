@@ -152,7 +152,7 @@ int main(int argc, char* argv[]){
     printf("%s\n", errorstring);
   }
 
-  err = clGetDeviceIDs(platform,CL_DEVICE_TYPE_CPU, 1, &device, &nmb_devices);
+  err = clGetDeviceIDs(platform,CL_DEVICE_TYPE_DEFAULT, 1, &device, &nmb_devices);
 
   if(err != CL_SUCCESS){
     printf("Error in clGetDeviceIDs\n");
